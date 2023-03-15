@@ -1,7 +1,10 @@
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 from logconfig.logger import get_logger
 from user.models import User
+
 logger = get_logger()
+
 
 class RegistrationSerializer(serializers.ModelSerializer):
     """
@@ -17,6 +20,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """
-               built in method for the serializer class to craete the db
+            built in method for the serializer class to craete the db
         """
         return User.objects.create_user(**validated_data)
+
+
+class LoginSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(max_length=150)
+    password = serializers.CharField(max_length=150)
+
+    def create(self, validated_data):
+        user = authenticate(username=validated_data['username'], password=validated_data['password'])
+        if not user:
+            raise serializers.ValidationError("Incorrect Credentials")
+        validated_data.update({'user': user})
+        self.context.update({'user': user})
+        return user
