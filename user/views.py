@@ -2,6 +2,7 @@ from django.contrib.auth import login, logout
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+# from user.jwt_util import JWT
 from logconfig.logger import get_logger
 from user.models import User
 from user.serializers import RegistrationSerializer, LoginSerializer
@@ -25,10 +26,10 @@ class UserRegistration(APIView):
             serializer.is_valid(raise_exception=True)  # if valid then deserialization
             serializer.save()
             return Response({"message": "User Registration Successfully", "status": 201, "data": serializer.data},
-                            status=status.HTTP_201_CREATED)
+                            status=201)
         except Exception as e:
             logger.exception(e)
-            return Response({"message": str(e), "status": 400, "data": {}}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": str(e), "status": 400, "data": {}}, status=400)
 
     def get(self, request):
         """
@@ -38,10 +39,10 @@ class UserRegistration(APIView):
             user = User.objects.all()
             serializer = RegistrationSerializer(user, many=True)
             return Response({"message": "Retrieve Data  Successfully", "status": 200, "data": serializer.data},
-                            status=status.HTTP_200_OK)
+                            status=200)
         except Exception as e:
             logger.exception(e)
-        return Response({"message": str(e), "status": 400, "data": {}}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": str(e), "status": 400, "data": {}}, status=400)
 
 
 class UserLogin(APIView):
@@ -62,7 +63,7 @@ class UserLogin(APIView):
             return Response({"message": "Login Successful", "status": 201, "data": {}}, status=201)
         except Exception as e:
             logger.exception(e)
-            return Response({"message": str(e), "status": 400, "data": {}}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": str(e), "status": 400, "data": {}}, status=400)
 
 
 class Logout(APIView):

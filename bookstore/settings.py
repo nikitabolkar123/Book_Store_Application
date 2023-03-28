@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-from datetime import timedelta
+from datetime import timedelta,datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'user',
     'book',
     'cart',
+    'cart_app',
     'rest_framework',
-    # 'rest_framework.authtoken',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'drf_yasg',
 ]
@@ -139,11 +140,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
 
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # "user.jwt_util.SessionAuth",
     )
 }
 
+
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),#after 1 hr token will expire
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=10),#after 1 hr token will expire
     "REFRESH_TOKEN_LIFETIME": timedelta(days=2),#after 2 days token automatically refresh
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
@@ -192,4 +195,6 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+
+# JWT_EXP = datetime.utcnow() + timedelta(minutes=60)
 

@@ -14,7 +14,7 @@ class BookAPIViews(APIView):
     serializer_class = BookSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    # @verify_token
     @swagger_auto_schema(request_body=BookSerializer, operation_summary='POST BOOK')  # automatically generated open api
     def post(self, request):
         if not request.user.is_superuser:
