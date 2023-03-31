@@ -1,17 +1,14 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from cart_app.models import UserCart, UserCartItem
 from cart_app.serializers import CartItemSerializer, CartSerializer
 from logconfig.logger import get_logger
 
 logger = get_logger()
 
-
 # Create your views here.
 
 class CartItemAPI(APIView):
-
     def post(self, request):
         try:
             request.data.update({"user": request.user.id})
@@ -27,7 +24,7 @@ class CartItemAPI(APIView):
     def get(self, request, cart_id):
         try:
             cart = UserCart.objects.get(id=cart_id)
-            print(cart.cart_items.filter(cart_id=cart_id))
+            # print(cart.cart_items.filter(cart_id=cart_id))
             cart_serializer = CartSerializer(cart, many=False)
             return Response({"Message": "List of Cart Items",
                              "data": cart_serializer.data,
@@ -48,14 +45,32 @@ class CartItemAPI(APIView):
 
 
 class CheckoutAPI(APIView):
-
     def put(self, request):
-        print(request.user.id)
+        # print(request.user.id)
         user = UserCart.objects.get(user_id=request.user.id, status=False)
         if user is not None:
             user.status = True
             user.save()
         return Response({"Message": "status updated Successfully", 'status': 200})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def get(self, request):
         try:
